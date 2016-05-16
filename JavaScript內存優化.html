@@ -1,0 +1,180 @@
+<html>
+<head>
+  <title>JavaScript內存優化</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="701"/>
+<h1>JavaScript內存優化</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><br/><div><div><h1>JavaScript內存優化</h1></div><p>相對 C/C++ 而言，我們所用的 JavaScript 在內存這一方面的處理已經讓我們在開發中更注重業務邏輯的編寫。但是隨著業務的不斷複雜化，單頁面應用、移動 HTML5 應用和 Node.js 程序等等的發展，JavaScript 中的內存問題所導致的卡頓、內存溢出等現象也變得不再陌生。</p><p>作為《JavaScript 從細節優化》的又一篇分享，這篇文章將從 JavaScript 的語言層面進行內存的使用和優化的探討。從大家熟悉或略有耳聞的方面，到大家大多數時候不會注意到的地方，我們一一進行剖析。</p><h2>1. 語言層面的內存管理</h2><h3>1.1 作用域</h3><p>作用域(scope)是 JavaScript 編程中一個非常重要的運行機制，在同步 JavaScript 編程中它並不能充分引起初學者的注意，但在異步編程中，良好的作用域控制技能成為了 JavaScript 開發者的必備技能。另外，作用域在 JavaScript 內存管理中起著至關重要的作用。</p><p>在 JavaScript 中，能形成作用域的有函數的調用、<code>with</code>語句和全局作用域。<br/>
+如以下代碼為例：</p><pre><code>var foo = function() {
+  var local = {};
+};
+foo();
+console.log(local); //=&gt; undefined
+
+var bar = function() {
+  local = {};
+};
+bar();
+console.log(local); //=&gt; {}
+</code></pre><p>這裡我們定義了<code>foo()</code>函數和<code>bar()</code>函數，他們的意圖都是為了定義一個名為<code>local</code>的變量。但最終的結果卻截然不同。</p><p>在<code>foo()</code>函數中，我們使用<code>var</code>語句來聲明定義了一個<code>local</code>變量，而因為函數體內部會形成一個作用域，所以這個變量便被定義到該作用域中。而且<code>foo()</code>函數體內並沒有做任何作用域延伸的處理，所以在該函數執行完畢後，這個<code>local</code>變量也隨之被銷毀。而在外層作用域中則無法訪問到該變量。</p><p>而在<code>bar()</code>函數內，<code>local</code>變量並沒有使用<code>var</code>語句進行聲明，取而代之的是直接把<code>local</code>作為全局變量來定義。故外層作用域可以訪問到這個變量。</p><pre><code>local = {};
+// 這裡的定義等效於
+global.local = {};
+</code></pre><h3>1.2 作用域鏈</h3><p>在 JavaScript 編程中，你一定會遇到多層函數嵌套的場景，這就是典型的作用域鏈的表示。<br/>
+如以下代碼所示：</p><pre><code>function foo() {
+  var val = 'hello';
+
+  function bar() {
+    function baz() {
+      global.val = 'world;'
+    }
+    baz();
+    console.log(val); //=&gt; hello
+  }
+  bar();
+}
+foo();
+</code></pre><p>根據前面關於作用域的闡述，你可能會認為這裡的代碼所顯示的結果是<code>world</code>，但實際的結果卻是<code>hello</code>。很多初學者在這裡就會開始感到困惑了，那麼我們再來看看這段代碼是怎麼工作的。</p><p>由於 JavaScript 中，變量標識符的查找是從當前作用域開始向外查找，直到全局作用域為止。所以 JavaScript 代碼中對變量的訪問只能向外進行，而不能逆而行之。</p><div><img src="JavaScript內存優化_files/7287333fgw1eegzhw6g3mj209805faa5.jpg" type="image/jpeg" height="195" style="cursor: default;cursor: default;" width="332"/></div><p><code>baz()</code>函數的執行在全局作用域中定義了一個全局變量<code>val</code>。而在<code>bar()</code>函數中，對<code>val</code>這一標識符進行訪問時，按照從內到外厄德查找原則：在<code>bar</code>函數的作用域中沒有找到，便到上一層，即<code>foo()</code>函數的作用域中查找。</p><p>然而，使大家產生疑惑的關鍵就在這裡：本次標識符訪問在<code>foo()</code>函數的作用域中找到了符合的變量，便不會繼續向外查找，故在<code>baz()</code>函數中定義的全局變量<code>val</code>並沒有在本次變量訪問中產生影響。</p><h3>1.3 閉包</h3><p>我們知道 JavaScript 中的標識符查找遵循從內到外的原則。但隨著業務邏輯的複雜化，單一的傳遞順序已經遠遠不能滿足日益增多的新需求。</p><p>我們先來看看下面的代碼：</p><pre><code>function foo() {
+  var local = 'Hello';
+  return function() {
+    return local;
+  };
+}
+var bar = foo();
+console.log(bar()); //=&gt; Hello
+</code></pre><p>這裡所展示的讓外層作用域訪問內層作用域的技術便是閉包(Closure)。得益於高階函數的應用，使<code>foo()</code>函數的作用域得到『延伸』。</p><p><code>foo()</code>函數返回了一個匿名函數，該函數存在於<code>foo()</code>函數的作用域內，所以可以訪問到<code>foo()</code>函數作用域內的<code>local</code>變量，並保存其引用。而因這個函數直接返回了<code>local</code>變量，所以在外層作用域中便可直接執行<code>bar()</code>函數以獲得<code>local</code>變量。</p><p>閉包是 JavaScript 的高級特性，我們可以藉助它來實現更多更複雜的效果來滿足不同的需求。但是要注意的是因為把帶有內部變量引用的函數帶出了函數外部，所以該作用域內的變量在函數執行完畢後的並不一定會被銷毀，直到內部變量的引用被全部解除。所以閉包的應用很容易造成內存無法釋放的情況。</p><h2>2. JavaScript 的內存回收機制</h2><p>這裡我將以 Chrome 和 Node.js 所使用的，由 Google 推出的 V8 引擎為例，簡要介紹一下 JavaScript 的內存回收機制，更詳盡的內容可以購買我的好朋友樸靈的書《深入淺出 Node.js》進行學習，其中『內存控制』一章中有相當詳細的介紹。</p><p>在 V8 中，所有的 JavaScript 對象都是通過『堆』來進行內存分配的。</p><p><img src="JavaScript內存優化_files/7287333fgw1eeh08y6gqlj208x020mwz.jpg" type="image/jpeg" height="72" style="cursor: default;cursor: default;" width="321"/></p><p>當我們在代碼中聲明變量並賦值時，V8 就會在堆內存中分配一部分給這個變量。如果已申請的內存不足以存儲這個變量時，V8 就會繼續申請內存，直到堆的大小達到了 V8 的內存上限為止。默認情況下，V8 的堆內存的大小上限在64位系統中為 1464MB，在32位系統中則為 732MB，即約 1.4GB 和 0.7GB。</p><p>另外，V8 對堆內存中的 JavaScript 對象進行分代管理：新生代和老生代。新生代即存活週期較短的 JavaScript 對象，如臨時變量、字符串等；而老生代則為經過多次垃圾回收仍然存活，存活週期較長的對象，如主控制器、服務器對象等。</p><p>垃圾回收算法一直是編程語言的研發中是否重要的一環，而 V8 中所使用的垃圾回收算法主要有以下幾種：</p><ol><li>Scavange 算法：通過複製的方式進行內存空間管理，主要用於新生代的內存空間；</li><li>Mark-Sweep 算法和 Mark-Compact 算法：通過標記來對堆內存進行整理和回收，主要用於老生代對象的檢查和回收。</li></ol><p><strong>PS: 更詳細的 V8 垃圾回收實現可以通過閱讀相關書籍、文檔和源代碼進行學習。</strong></p><p>我們再來看看 JavaScript 引擎在什麼情況下會對哪些對象進行回收。</p><h3>2.1 作用域與引用</h3><p>初學者常常會誤認為當函數執行完畢時，在函數內部所聲明的對象就會被銷毀。但實際上這樣理解並不嚴謹和全面，很容易被其導致混淆。</p><p>引用(Reference)是 JavaScript 編程中十分重要的一個機制，但奇怪的是一般的開發者都不會刻意注意它、甚至不瞭解它。引用是指『代碼對對象的訪問』這一抽象關係，它與 C/C++ 的指針有點相似，但並非同物。引用同時也是 JavaScript 引擎在進行垃圾回收中最關鍵的一個機制。</p><p>一下面代碼為例：</p><pre><code>// ......
+var val = 'hello world';
+function foo() {
+  return function() {
+    return val;
+  };
+}
+global.bar = foo();
+// ......
+</code></pre><p>閱讀完這段代碼，你能否說出這部分代碼在執行過後，有哪些對象是依然存活的麼？</p><p>根據相關原則，這段代碼中沒有被回收釋放的對象有<code>val</code>和<code>bar()</code>，究竟是什麼原因使他們無法被回收？</p><p>JavaScript 引擎是如何進行垃圾回收的？前面說到的垃圾回收算法只是用在回收時的，那麼它是如何知道哪些對象可以被回收，哪些對象需要繼續生存呢？答案就是 JavaScript 對象的引用。</p><p>JavaScript 代碼中，哪怕是簡單的寫下一個變量名稱作為單獨一行而不做任何操作，JavaScript 引擎都會認為這是對對象的訪問行為，存在了對對象的引用。為了保證垃圾回收的行為不影響程序邏輯的運行，JavaScript 引擎就決不能把正在使用的對象進行回收，不然就亂套了。所以判斷對象是否正在使用中的標準，就是是否仍然存在對該對象的引用。但事實上，這是一種妥協的做法，因為 JavaScript 的引用是可以進行轉移的，那麼就有可能出現某些引用被帶到了全局作用域，但事實上在業務邏輯裏已經不需要對其進行訪問了，應該被回收，但是 JavaScript 引擎仍會死板地認為程序仍然需要它。</p><p>如何用正確的姿勢使用變量、引用，正是從語言層面優化 JavaScript 的關鍵所在。</p><h2>3. 優化你的 JavaScript</h2><p>終於進入正題了，非常感謝你秉著耐心看到了這裡，經過上面這麼多介紹，相信你已經對 JavaScript 的內存管理機制有了不錯的理解，那麼下面的技巧將會讓你如虎添翼。</p><h3>3.1 善用函數</h3><p>如果你有閱讀優秀 JavaScript 項目的習慣的話，你會發現，很多大牛在開發前端 JavaScript 代碼的時候，常常會使用一個匿名函數在代碼的最外層進行包裹。</p><pre><code>;(function() {
+  // 主業務代碼
+})();
+</code></pre><p>有的甚至更高級一點：</p><pre><code>;(function(win, doc, $, undefined) {
+  // 主業務代碼
+})(window, document, jQuery);
+</code></pre><p>甚至連如 RequireJS, SeaJS, OzJS 等前端模塊化加載解決方案，都是採用類似的形式：</p><pre><code>// RequireJS
+define(['jquery'], function($) {
+  // 主業務代碼
+});
+
+// SeaJS
+define('module', ['dep', 'underscore'], function($, _) {
+  // 主業務代碼
+});
+</code></pre><p>如果你說很多 Node.js 開源項目的代碼都沒有這樣處理的話，那你就錯了。Node.js 在實際運行代碼之前，會把每一個 .js 文件進行包裝，變成如下的形式：</p><pre><code>(function(exports, require, module, __dirname, __filename) {
+  // 主業務代碼
+});
+</code></pre><p>這樣做有什麼好處？我們都知道文章開始的時候就說了，JavaScript 中能形成作用域的有函數的調用、<code>with</code>語句和全局作用域。而我們也知道，被定義在全局作用域的對象，很有可能是會一直存活到進程退出的，如果是一個很大的對象，那就麻煩了。 比如有的人喜歡在 JavaScript 中做模版渲染：</p><pre><code>&lt;?php
+  $db = mysqli_connect(server, user, password, 'myapp');
+  $topics = mysqli_query($db, &quot;SELECT * FROM topics;&quot;);
+?&gt;
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;你是猴子請來的逗比麼？&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;ul id=&quot;topics&quot;&gt;&lt;/ul&gt;
+  &lt;script type=&quot;text/tmpl&quot; id=&quot;topic-tmpl&quot;&gt;
+    &lt;li class=&quot;topic&quot;&gt;
+      &lt;h1&gt;&lt;%=title%&gt;&lt;/h1&gt;
+      &lt;p&gt;&lt;%=content%&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot;&gt;
+    var data = &lt;?php echo json_encode($topics); ?&gt;;
+    var topicTmpl = document.querySelector('#topic-tmpl').innerHTML;
+    var render = function(tmlp, view) {
+      var complied = tmlp
+        .replace(/\n/g, '\\n')
+        .replace(/&lt;%=([\s\S]+?)%&gt;/g, function(match, code) {
+          return '&quot; + escape(' + code + ') + &quot;';
+        });
+
+      complied = [
+        'var res = &quot;&quot;;',
+        'with (view || {}) {',
+          'res = &quot;' + complied + '&quot;;',
+        '}',
+        'return res;'
+      ].join('\n');
+
+      var fn = new Function('view', complied);
+      return fn(view);
+    };
+
+    var topics = document.querySelector('#topics');
+    function init()     
+      data.forEach(function(topic) {
+        topics.innerHTML += render(topicTmpl, topic);
+      });
+    }
+    init();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>這種代碼在新手的作品中經常能看得到，這裡存在什麼問題呢？如果在從數據庫中獲取到的數據的量是非常大的話，前端完成模板渲染以後，<code>data</code>變量便被閒置在一邊。可因為這個變量是被定義在全局作用域中的，所以 JavaScript 引擎不會將其回收銷毀。如此該變量就會一直存在於老生代堆內存中，直到頁面被關閉。</p><p>可是如果我們作出一些很簡單的修改，在邏輯代碼外包裝一層函數，這樣效果就大不同了。當 UI 渲染完成之後，代碼對<code>data</code>的引用也就隨之解除，而在最外層函數執行完畢時，JavaScript 引擎就開始對其中的對象進行檢查，<code>data</code>也就可以隨之被回收。</p><h3>3.2 絕對不要定義全局變量</h3><p>我們剛才也談到了，當一個變量被定義在全局作用域中，默認情況下 JavaScript 引擎就不會將其回收銷毀。如此該變量就會一直存在於老生代堆內存中，直到頁面被關閉。</p><p>那麼我們就一直遵循一個原則：絕對不要使用全局變量。雖然全局變量在開發中確實很省事，但是全局變量所導致的問題遠比其所帶來的方便更嚴重。</p><ol><li>使變量不易被回收；</li><li>多人協作時容易產生混淆；</li><li>在作用域鏈中容易被干擾。</li></ol><p>配合上面的包裝函數，我們也可以通過包裝函數來處理『全局變量』。</p><h3>3.3 手工解除變量引用</h3><p>如果在業務代碼中，一個變量已經確切是不再需要了，那麼就可以手工解除變量引用，以使其被回收。</p><pre><code>var data = { /* some big data */ };
+// blah blah blah
+data = null;
+</code></pre><h3>3.4 善用回調</h3><p>除了使用閉包進行內部變量訪問，我們還可以使用現在十分流行的回調函數來進行業務處理。</p><pre><code>function getData(callback) {
+  var data = 'some big data';
+
+  callback(null, data);
+}
+
+getData(function(err, data) {
+  console.log(data);
+});
+</code></pre><p>回調函數是一種後續傳遞風格(Continuation Passing Style, CPS)的技術，這種風格的程序編寫將函數的業務重點從返回值轉移到回調函數中去。而且其相比閉包的好處也不少：</p><ol><li>如果傳入的參數是基礎類型（如字符串、數值），回調函數中傳入的形參就會是複製值，業務代碼使用完畢以後，更容易被回收；</li><li>通過回調，我們除了可以完成同步的請求外，還可以用在異步編程中，這也就是現在非常流行的一種編寫風格；</li><li>回調函數自身通常也是臨時的匿名函數，一旦請求函數執行完畢，回調函數自身的引用就會被解除，自身也得到回收。</li></ol><h3>3.5 良好的閉包管理</h3><p>當我們的業務需求(如循環事件綁定、私有屬性、含參回調等)一定要使用閉包時，請謹慎對待其中的細節。</p><p>循環綁定事件可謂是 JavaScript 閉包入門的必修課，我們假設一個場景：有六個按鈕，分別對應六種事件，當用戶點擊按鈕時，在指定的地方輸出相應的事件。</p><pre><code>var btns = document.querySelectorAll('.btn'); // 6 elements
+var output = document.querySelector('#output');
+var events = [1, 2, 3, 4, 5, 6];
+
+// Case 1
+for (var i = 0; i &lt; btns.length; i++) {
+  btns[i].onclick = function(evt) {
+    output.innerText += 'Clicked ' + events[i];
+  };
+}
+
+// Case 2
+for (var i = 0; i &lt; btns.length; i++) {
+  btns[i].onclick = (function(index) {
+    return function(evt) {
+      output.innerText += 'Clicked ' + events[index];
+    };
+  })(i);
+}
+
+// Case 3
+for (var i = 0; i &lt; btns.length; i++) {
+  btns[i].onclick = (function(event) {
+    return function(evt) {
+      output.innerText += 'Clicked ' + event;
+    };
+  })(events[i]);
+}
+</code></pre><p>這裡第一個解決方案顯然是典型的循環綁定事件錯誤，這裡不細說，詳細可以參照<a href="http://www.html-js.com/qa/308#answer-654" target="_blank">我給一個網友的回答</a>；而第二和第三個方案的區別就在於閉包傳入的參數。</p><p>第二個方案傳入的參數是當前循環下標，而後者是直接傳入相應的事件對象。事實上，後者更適合在大量數據應用的時候，因為在 JavaScript 的函數式編程中，函數調用時傳入的參數是基本類型對象，那麼在函數體內得到的形參會是一個複製值，這樣這個值就被當作一個局部變量定義在函數體的作用域內，在完成事件綁定之後就可以對<code>events</code>變量進行手工解除引用，以減輕外層作用域中的內存佔用了。而且當某個元素被刪除時，相應的事件監聽函數、事件對象、閉包函數也隨之被銷毀回收。</p><h3>3.6 內存不是緩存</h3><p>緩存在業務開發中的作用舉足輕重，可以減輕時空資源的負擔。但需要注意的是，不要輕易將內存當作緩存使用。內存對於任何程序開發來說都是寸土寸金的東西，如果不是很重要的資源，請不要直接放在內存中，或者制定過期機制，自動銷毀過期緩存。</p><h2>4. 檢查 JavaScript 的內存使用情況</h2><p>在平時的開發中，我們也可以藉助一些工具來對 JavaScript 中內存使用情況進行分析和問題排查。</p><h3>4.1 Blink / Webkit 瀏覽器</h3><p>在 Blink / Webkit 瀏覽器中（Chrome, Safari, Opera etc.），我们可以藉助其中的 Developer Tools 的 Profiles 工具來對我們的程序進行內存檢查。</p><div><img src="JavaScript內存優化_files/7287333fgw1eehhj2zplnj20sq0pvq83.jpg" type="image/jpeg" alt="Developer Tools - Profiles" height="519" style="cursor: default;cursor: default;" width="576"/></div><h3>4.2 Node.js 中的內存檢查</h3><p>在 Node.js 中，我們可以使用 node-heapdump 和 node-memwatch 模塊進行內存檢查。</p><pre><code>var heapdump = require('heapdump');
+var fs = require('fs');
+var path = require('path');
+fs.writeFileSync(path.join(__dirname, 'app.pid'), process.pid);
+// ...
+</code></pre><p>在業務代碼中引入 node-heapdump 之後，我們需要在某個運行時期，向 Node.js 進程發送 SIGUSR2 信號，讓 node-heapdump 抓拍一份堆內存的快照。</p><pre><code>$ kill -USR2 (cat app.pid)
+</code></pre><p>這樣在文件目錄下會有一個以<code>heapdump-&lt;sec&gt;.&lt;usec&gt;.heapsnapshot</code>格式命名的快照文件，我們可以使用瀏覽器的 Developer Tools 中的 Profiles 工具將其打開，並進行檢查。</p><p>很快又來到了文章的結束，這篇分享主要向大家展示了以下幾點內容：</p><ol><li>JavaScript 在語言層面上，與內存使用息息相關的東西；</li><li>JavaScript 中的內存管理、回收機制；</li><li>如何更高效地使用內存，以至於讓出產的 JavaScript 能更有拓展的活力；</li><li>如何在遇到內存問題的時候，進行內存檢查。</li></ol><p>希望通過對這篇文章的學習，你能夠出產更優秀的 JavaScript 代碼，讓媽媽安心、讓老闆放心。</p><p>這篇系列到這裡又要告一段落了，希望下次能更快地連載吧。</p><blockquote><p>Being Lucky</p></blockquote></div><br/></span>
+</div></body></html> 

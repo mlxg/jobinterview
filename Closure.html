@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Closure</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="699"/>
+<h1>Closure</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div><strong>Closure</strong></div><div><br/></div><div><strong>了解什么是闭包</strong></div><div><hr/></div><div>让 外层作用域 访问 内层作用域</div><div>闭包就是能够读取其他函数内部变量的函数</div><div>由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成&quot;定义在一个函数内部的函数&quot;。</div><div>所以，在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。</div><div>闭包是函数的嵌套，内部函数可以使用外部函数的所有变量。</div><div>当内部函数 在定义它的作用域 的外部 被引用时,就创建了该内部函数的闭包 ,如果内部函数引用了位于外部函数的变量,当外部函数调用完毕后,这些变量在内存不会被 释放,因为闭包需要它们.</div><div><br/></div><div>所谓“闭包”，就是在构造函数体内定义另外的函数作为目标对象的方法函数，而这个对象的方法函数反过来引用外层函数体中的临时变量。这使得只要目标 对象在生存期内始终能保持其方法，就能间接保持原构造函数体当时用到的临时变量值。尽管最开始的构造函数调用已经结束，临时变量的名称也都消失了，但在目 标对象的方法内却始终能引用到该变量的值，而且该值只能通这种方法来访问。即使再次调用相同的构造函数，但只会生成新对象和方法，新的临时变量只是对应新 的值，和上次那次调用的是各自独立的。</div><div><br/></div><div>它的最大用处有两个</div><div>1.可以读取函数内部的变量</div><div>2.让这些变量的值始终保持在内存中</div><div>3.构建命名空间，减少全局变量</div><div><br/></div><div><br/></div><div><strong>如何使用闭包</strong></div><div><hr/></div><div>function foo() {</div><div>  var local = 'Hello';</div><div>  return function() {</div><div>    return local;</div><div>  };</div><div>}</div><div>var bar = foo();</div><div>console.log(bar()); //=&gt; Hello</div><div><br/></div><div><br/></div><div><strong>闭包的缺点</strong></div><div><hr/></div><div><br/></div><div>容易造成浏览器内存外泄，甚至挂死</div><div><i>因为把带有内部变量的函数带出了函数外部 ,  所以该作用域内的变量 在 函数执行完了之后并不一定会被销毁,知道内部变量的引用被全部解除, 所以闭包应用很容易造成 内存无法释放的情况</i></div><div><br/></div><div><br/></div><div><strong>使用闭包的注意点</strong></div><div><hr/></div><div>1.由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。</div><div><br/></div><div>2.闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便</div><div><br/></div><div>改变父函数内部变量的值。</div><div><br/></div><div><br/></div><div><strong>闭包内的微观世界</strong></div><div><hr/></div><div>函数的执行环境(excution context)、活动对象(call object)、作用域(scope)、作用域链(scope chain)。以函数a从定义到执行的过程为例阐述这几个概念。</div><div><br/></div><div>  当<strong>定义</strong>函数A的时候，js解释器会将函数A的<strong>作用域链(scope chain)</strong>设置为<strong>定义A时A所在的“环境”</strong>，如果a是一个全局函数，则scope chain中只有window对象。</div><div><br/></div><div>  当<strong>执行</strong>函数A的时候，A会进入相应的<strong>执行环境(excution context)</strong>。</div><div><br/></div><div>  在创建执行环境的过程中，首先会为A添加一个scope属性，即a的<strong>作用域</strong>，其值就为第1步中的scope chain。即A.scope = A的作用域链。</div><div><br/></div><div>  然后执行环境会创建一个<strong>活动对象(call object)</strong>。活动对象也是一个拥有属性的对象，但它不具有原型而且不能通过JavaScript代码直接访问。创建完活动对象后，把活动对象添加到a的作用域链的最顶端。此时a的作用域链包含   了两个对象：a的活动对象和window对象。</div><div><br/></div><div>  下一步是在活动对象上添加一个arguments属性，它保存着调用函数a时所传递的参数。</div><div><br/></div><div>  最后把所有函数a的形参和内部的函数b的引用也添加到a的活动对象上。在这一步中，完成了函数b的的定义，因此如同第3步，函数b的作用域链被设置为b所被定义的环境，即a的作用域。</div><div><br/></div><div>function A(){<br/>
+  var i = 0;<br/>
+  function B(){<br/>
+    alert(++i);<br/>
+  }<br/>
+  return B();<br/>
+}<br/><br/>
+var C = A();<br/>
+C();</div><div><b><br/></b></div><div><strong>Javascript的垃圾回收机制</strong></div><div><hr/></div><div>在Javascript中,如果一个对象不再被引用,那么这个对象就会被GC回收</div><div>如果两个对象互相引用，而不再被第3者所引用</div><div>那么这两个互相引用的对象也会被回收</div><div>因为函数A被B引用,B又被A外的C引用,这就是为什么函数A执行后不会被回收的原因</div><div><br/></div><div><br/></div><div><strong>匿名函数</strong></div><div><hr/></div><div>匿名函数是没有名字的函数</div><div><br/></div><div>在Javascript中，一个函数可以作为另外一个函数接收一个参数。</div><div><br/></div><div>我们可以先定义一个函数，然后传递，也可以在传递参数的地方直接定义函数。</div><div><br/></div><div>Javascript中，函数和其他变量一样都是可以被传递的。</div><div><br/></div><div><br/></div><div><strong>匿名函数的作用</strong></div><div><hr/></div><div>  模拟块级作用域，避免数据污染</div><div>  执行完就销毁，避免内存长驻</div><div><br/></div><div>如：</div><div>function say(a){</div><div>     console.log(a);</div><div>}</div><div><br/></div><div>function exec(fun,val){</div><div>     fun(val);</div><div>}</div><div>exec(say,'hello');</div><div>say作为exec函数的第一个变量进行了传递,这里传递过去的不是say的返回值，而是say本身。</div><div><br/></div><div>这样以来say就变成了exec中的本地变量fun，exec可以通过调用fun()来使用say函数。</div><div><br/></div><div>我们可以，就像刚才那样，用他的名字把一个函数作为变量传递，但是我们不一定要绕这个&quot;先定义，在传递&quot;的圈子，我们可以直接在另外一个函数的括号中定义和传递这个函数。</div><div>function exec(fun,val){</div><div>     fun(val);</div><div>}</div><div><br/></div><div>exec(function(a){ console.log(a);},'hello');</div><div><br/></div><div>我们在exec接受一个参数的地方直接定义了我们准备传递给exec的函数</div><div><br/></div><div>用这种方式，我们甚至不用给这个函数起名字，这也是为什么它被叫做<strong>匿名函数</strong></div><div><strong><br/></strong></div><div><strong><br/></strong></div><div><strong><br/></strong></div><div><br/></div></span>
+</div></body></html> 

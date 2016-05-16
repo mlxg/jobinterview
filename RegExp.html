@@ -1,0 +1,130 @@
+<html>
+<head>
+  <title>RegExp</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="680"/>
+<h1>RegExp</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><b>RegExp 对象  </b>表示正则表达式，它是对字符串执行模式匹配的强大工具<br/><br/>
+直接量语法<br/>
+/pattern/attributes<br/><br/>
+参数 pattern 是一个字符串，指定了正则表达式的模式或其他正则表达式<br/>
+参数 attributes 是一个可选的字符串，包含属性 &quot;g&quot;、&quot;i&quot; 和 &quot;m&quot;，分别用于指定全局匹配、区分大小写的匹配和多行匹配<br/>
+ECMAScript 标准化之前，不支持 m 属性。如果 pattern 是正则表达式，而不是字符串，则必须省略该参数<br/><br/><br/>
+SyntaxError - 如果 pattern 不是合法的正则表达式，或 attributes 含有 &quot;g&quot;、&quot;i&quot; 和 &quot;m&quot; 之外的字符，抛出该异常<br/>
+TypeError - 如果 pattern 是 RegExp 对象，但没有省略 attributes 参数，抛出该异常<br/><br/>
+var reg = new RegExp(/[\u4e00-\u9fa5]{2,6}/g);
+<div><div>var reg = new RegExp('we');</div><br/><b>修饰符</b><br/><hr/><div>i 执行对大小写不敏感的匹配<br/>
+g 执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）<br/>
+m 执行多行匹配。<br/><br/><br/><br/><b>方括号</b></div><div><hr/>
+方括号用于查找某个范围内的字符<br/><br/>
+[abc] 查找方括号之间的任何字符<br/>
+[^abc]  查找任何不在方括号之间的字符<br/>
+[0-9] 查找任何从 0 至 9 的数字<br/>
+[a-z] 查找任何从小写 a 到小写 z 的字符<br/>
+[A-Z] 查找任何从大写 A 到大写 Z 的字符<br/>
+[A-z] 查找任何从大写 A 到小写 z 的字符<br/>
+[adgk]  查找给定集合内的任何字符<br/>
+[^adgk] 查找给定集合外的任何字符<br/>
+(red|blue|green)  查找任何指定的选项<br/><br/><br/><br/><b>元字符</b><br/><hr/></div><div>元字符（Metacharacter）是拥有特殊含义的字符</div><div><br/>
+.   查找单个字符，除了换行和行结束符<br/>
+\w  查找单词字符<br/>
+\W  查找非单词字符<br/>
+\d  查找数字<br/>
+\D  查找非数字字符<br/>
+\s  查找空白字符<br/>
+\S  查找非空白字符<br/>
+\b  匹配单词边界<br/>
+\B  匹配非单词边界<br/>
+\0  查找 NUL 字符<br/>
+\n  查找换行符<br/>
+\f  查找换页符<br/>
+\r  查找回车符<br/>
+\t  查找制表符<br/>
+\v  查找垂直制表符<br/>
+\xxx  查找以八进制数 xxx 规定的字符<br/>
+\xdd  查找以十六进制数 dd 规定的字符<br/>
+\uxxxx  查找以十六进制数 xxxx 规定的 Unicode 字符<br/><br/><br/><b>量词</b></div><div><hr/>
+n+  匹配任何包含至少一个 n 的字符串<br/>
+n*  匹配任何包含零个或多个 n 的字符串<br/>
+n?  匹配任何包含零个或一个 n 的字符串<br/>
+n{X}  匹配包含 X 个 n 的序列的字符串<br/>
+n{X,Y}  匹配包含 X 或 Y 个 n 的序列的字符串<br/>
+n{X,} 匹配包含至少 X 个 n 的序列的字符串<br/>
+n$  匹配任何结尾为 n 的字符串<br/>
+^n  匹配任何开头为 n 的字符串<br/>
+?=n 匹配任何其后紧接指定字符串 n 的字符串<br/>
+?!n 匹配任何其后没有紧接指定字符串 n 的字符串<b><br/></b></div><div><br/><br/><br/><b>RegExp 对象方法</b></div><div><hr/>
+compile 编译正则表达式<br/>
+exec  检索字符串中指定的值。返回找到的值，并确定其位置<br/>
+test  检索字符串中指定的值。返回 true 或 false<br/><br/><br/><b>支持正则表达式的 String 对象的方法</b></div><div><hr/>
+search  检索与正则表达式相匹配的值<br/>
+match 找到一个或多个正则表达式的匹配<br/>
+replace 替换与正则表达式匹配的子串<br/>
+split 把字符串分割为字符串数组<br/></div><div><br/></div><div style="font-size: 21px;"><b>Common </b><b>ReqExp</b></div><div><hr/></div><div>调用方法：</div><div>var isEmail = isEmail($(&quot;#input1&quot;).val());alert(isEmail);//true or false</div><div><br/></div><div>1. 匹配IP地址</div><div>function isIP(value){</div><div>  return /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i.test(value);</div><div>}</div><div><br/></div><div>2.匹配URL</div><div>function isURL(value){</div><div>  return /^((http|https):\/\/(\w+:{0,1}\w*@)?(\S+)|)(:[0-9]+)?(\/|\/([\w#!:.?+=&amp;%@!\-\/]))?$/.test(value);</div><div>}</div><div><br/></div><div>3.匹配全汉字</div><div>function isChina(value){</div><div>  return /^[\u4E00-\u9FA3]{1,}$/.test(value);</div><div>}</div><div><br/></div><div>4.匹配身份证号码</div><div>function isIDCard(value){</div><div>  return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value);</div><div>}</div><div><br/></div><div>5.匹配手机号码</div><div>function isPhoneNum(value){</div><div>   return /^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/.test(value);</div><div>}</div><div><br/></div><div>6.匹配邮箱</div><div><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">function CheckMail(mail) {</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">if (filter.test(mail)) return true;</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">else {</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">alert('您的电子邮件格式不正确');</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">return false;}</span><br style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none;"/><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);">}</span></div><div><span style="font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; -webkit-text-size-adjust: none; background-color: rgb(255, 255, 255);"><br/></span></div><div>function isEmail(value){</div><div>   return /^((([a-z]|\d|[!#\$%&amp;'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&amp;'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(value);</div><div>}</div><div><br/></div><div>7.匹配数字</div><div>function isNum(value){</div><div>   return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);</div><div>}</div><div><br/></div><div>8.匹配日期</div><div>function isDate(value){</div><div>   return !/Invalid|NaN/.test(new Date(value).toString());</div><div>}</div><div><br/></div><div>9.匹配字母和下划线开头，允许n-m字节，允许字母数字下划线</div><div>function isAccountValid(value,m,n){</div><div>   var _n = n-1, _m = m-1;</div><div>   return new RegExp(&quot;^[a-zA-Z_][a-zA-Z0-9_]{&quot;+_n+&quot;,&quot;+_m+&quot;}$&quot;).test(value);</div><div><br/></div><div>String.prototype.trim = function (){  <br/>
+       return this.replace(/(^\s*)|(\s*$)/g, &quot;&quot;);  <br/>
+     }  </div><div><br/></div><div>只含有数字，字母，下划线</div><div>/^([a-zA-Z0-9]|[_]){4,20}$/</div><div><br/></div><div><br/></div><div><span style="font-family: &amp;apos;ms shell dlg&amp;apos;; font-size: 14px; line-height: 28px; background-color: rgb(255, 255, 255);">只含有汉字、数字、字母、下划线，下划线位置不限：</span><br style="clear: both; font-family: &amp;apos;ms shell dlg&amp;apos;; font-size: 14px; line-height: 28px; background-color: rgb(255, 255, 255);"/>
+/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/</div><div><span style="font-family: &amp;apos;ms shell dlg&amp;apos;; font-size: 14px; line-height: 28px; background-color: rgb(255, 255, 255);"><br/></span></div><div><span style="font-family: &amp;apos;ms shell dlg&amp;apos;; font-size: 14px; line-height: 28px; background-color: rgb(255, 255, 255);">由数字、26个英文字母或者下划线组成的字符串</span><br style="clear: both; font-family: &amp;apos;ms shell dlg&amp;apos;; font-size: 14px; line-height: 28px; background-color: rgb(255, 255, 255);"/>
+/^\w+$/</div><div><br/></div><div><br/></div><div>手机号码正则</div><div>/^1[0-9]{10}$/</div><div>/^1[3-8]{1}[0-9]{8}/</div><div><br/></div><div>纯汉字</div><div>/^[\u4E00-\u9FA5]+$/i</div><div><br/></div><div><br/></div><div><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">(&quot;/^[/xa1-/xff]+$/&quot;这是一个纯中文字符串<br style="margin: 0px; padding: 0px;"/>
+正则表达式用于字符串处理、表单验证等场合，实用高效。现将一些常用的表达式收集于此，以备不时之需。</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配中文字符的正则表达式： [/u4e00-/u9fa5]<br style="margin: 0px; padding: 0px;"/>
+评注：匹配中文还真是个头疼的事，有了这个表达式就好办了</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配双字节字符(包括汉字在内)：[^/x00-/xff]<br style="margin: 0px; padding: 0px;"/>
+评注：可以用来计算字符串的长度（一个双字节字符长度计2，ASCII字符计1）</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配空白行的正则表达式：/n/s*/r<br style="margin: 0px; padding: 0px;"/>
+评注：可以用来删除空白行</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配HTML标记的正则表达式：&lt;(/S*?)[^&gt;]*&gt;.*?|&lt;.*? /&gt;<br style="margin: 0px; padding: 0px;"/>
+评注：网上流传的版本太糟糕，上面这个也仅仅能匹配部分，对于复杂的嵌套标记依旧无能为力</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配首尾空白字符的正则表达式：^/s*|/s*$<br style="margin: 0px; padding: 0px;"/>
+评注：可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配Email地址的正则表达式：/w+([-+.]/w+)*@/w+([-.]/w+)*/./w+([-.]/w+)*<br style="margin: 0px; padding: 0px;"/>
+评注：表单验证时很实用</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配网址URL的正则表达式：[a-zA-z]+://[^/s]*<br style="margin: 0px; padding: 0px;"/>
+评注：网上流传的版本功能很有限，上面这个基本可以满足需求</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$<br style="margin: 0px; padding: 0px;"/>
+评注：表单验证时很实用</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配国内电话号码：/d{3}-/d{8}|/d{4}-/d{7}<br style="margin: 0px; padding: 0px;"/>
+评注：匹配形式如 0511-4405222 或 021-87888822</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配腾讯QQ号：[1-9][0-9]{4,}<br style="margin: 0px; padding: 0px;"/>
+评注：腾讯QQ号从10000开始</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配中国邮政编码：[1-9]/d{5}(?!/d)<br style="margin: 0px; padding: 0px;"/>
+评注：中国邮政编码为6位数字</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配身份证：/d{15}|/d{18}<br style="margin: 0px; padding: 0px;"/>
+评注：中国的身份证为15位或18位</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配ip地址：/d+/./d+/./d+/./d+<br style="margin: 0px; padding: 0px;"/>
+评注：提取ip地址时有用</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配特定数字：<br style="margin: 0px; padding: 0px;"/>
+^[1-9]/d*$　 　 //匹配正整数<br style="margin: 0px; padding: 0px;"/>
+^-[1-9]/d*$ 　 //匹配负整数<br style="margin: 0px; padding: 0px;"/>
+^-?[1-9]/d*$　　 //匹配整数<br style="margin: 0px; padding: 0px;"/>
+^[1-9]/d*|0$　 //匹配非负整数（正整数 + 0）<br style="margin: 0px; padding: 0px;"/>
+^-[1-9]/d*|0$　　 //匹配非正整数（负整数 + 0）<br style="margin: 0px; padding: 0px;"/>
+^[1-9]/d*/./d*|0/./d*[1-9]/d*$　　 //匹配正浮点数<br style="margin: 0px; padding: 0px;"/>
+^-([1-9]/d*/./d*|0/./d*[1-9]/d*)$　 //匹配负浮点数<br style="margin: 0px; padding: 0px;"/>
+^-?([1-9]/d*/./d*|0/./d*[1-9]/d*|0?/.0+|0)$　 //匹配浮点数<br style="margin: 0px; padding: 0px;"/>
+^[1-9]/d*/./d*|0/./d*[1-9]/d*|0?/.0+|0$　　 //匹配非负浮点数（正浮点数 + 0）<br style="margin: 0px; padding: 0px;"/>
+^(-([1-9]/d*/./d*|0/./d*[1-9]/d*))|0?/.0+|0$　　//匹配非正浮点数（负浮点数 + 0）<br style="margin: 0px; padding: 0px;"/>
+评注：处理大量数据时有用，具体应用时注意修正</p><p style="margin: 10px auto; padding: 0px; line-height: 19.5px; font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; text-align: left; background-color: rgb(254, 254, 242);">匹配特定字符串：<br style="margin: 0px; padding: 0px;"/>
+^[A-Za-z]+$　　//匹配由26个英文字母组成的字符串<br style="margin: 0px; padding: 0px;"/>
+^[A-Z]+$　　//匹配由26个英文字母的大写组成的字符串<br style="margin: 0px; padding: 0px;"/>
+^[a-z]+$　　//匹配由26个英文字母的小写组成的字符串<br style="margin: 0px; padding: 0px;"/>
+^[A-Za-z0-9]+$　　//匹配由数字和26个英文字母组成的字符串<br style="margin: 0px; padding: 0px;"/>
+^/w+$　　//匹配由数字、26个英文字母或者下划线组成的字符串</p></div><div><pre style="margin-top: 0px; margin-bottom: 0px; padding: 0.5em; white-space: pre-wrap; word-wrap: break-word; overflow: auto; font-size: 12px; color: rgb(248, 248, 242); background-color: rgb(35, 36, 31); background-position: initial initial; background-repeat: initial initial;"><span style="margin: 0px; padding: 0px; color: rgb(255, 255, 255);"><span style="margin: 0px; padding: 0px; color: rgb(102, 217, 239);">function</span> <span style="margin: 0px; padding: 0px; color: rgb(166, 226, 46);">test</span><span style="margin: 0px; padding: 0px; color: rgb(248, 248, 242);">(str, re, msg)</span> {</span>
+    <span style="margin: 0px; padding: 0px; color: rgb(249, 38, 114);">var</span> ret = str.match(re || <span style="margin: 0px; padding: 0px; color: rgb(174, 129, 255);">/^(\d+)$|^([a-zA-Z]+)$|^([a-zA-Z].+)$|^([0-9a-zA-Z]+)$|^([\s\S]+)$/</span>);
+    <span style="margin: 0px; padding: 0px; color: rgb(249, 38, 114);">var</span> msg = msg || [<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;&quot;</span>, <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;纯数字&quot;</span>, <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;纯字母&quot;</span>, <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;字母开头+任意字符&quot;</span>, <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;数字+字母任意组合&quot;</span>, <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;未分类&quot;</span>];
+    <span style="margin: 0px; padding: 0px; color: rgb(249, 38, 114);">var</span> i = <span style="margin: 0px; padding: 0px; color: rgb(174, 129, 255);">0</span>;
+    <span style="margin: 0px; padding: 0px; color: rgb(249, 38, 114);">while</span> (ret[++i] === <span style="margin: 0px; padding: 0px; color: rgb(174, 129, 255);">undefined</span>);
+    <span style="margin: 0px; padding: 0px; color: rgb(249, 38, 114);">return</span> msg[i];
+}
+</pre><pre style="margin-top: 0px; margin-bottom: 0px; padding: 0.5em; white-space: pre-wrap; word-wrap: break-word; overflow: auto; font-size: 12px; color: rgb(248, 248, 242); background-color: rgb(35, 36, 31); background-position: initial initial; background-repeat: initial initial;">
+判断密码类型
+</pre><pre style="margin-top: 0px; margin-bottom: 0px; padding: 0.5em; white-space: pre-wrap; word-wrap: break-word; overflow: auto; font-size: 12px; color: rgb(248, 248, 242); background-color: rgb(35, 36, 31); background-position: initial initial; background-repeat: initial initial;">
+console.log(test(<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;123&quot;</span>));
+console.log(test(<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;sss&quot;</span>));
+console.log(test(<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;123xx&quot;</span>));
+console.log(test(<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;a123xx&quot;</span>));
+console.log(test(<span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;%$#@&quot;</span>));
+</pre></div></div><div><br/></div><div><pre style="margin-top: 0px; margin-bottom: 0px; padding: 0.5em; white-space: pre-wrap; word-wrap: break-word; overflow: auto; font-size: 12px; color: rgb(248, 248, 242); background-color: rgb(35, 36, 31); background-position: initial initial; background-repeat: initial initial;">
+ /^(\d+)$/ 对应 <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;纯数字&quot;</span>
+ /^([a-zA-Z]+)$/ 对应 <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;纯字母&quot;</span>
+ /^([a-zA-Z].+)$/ 对应 <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;字母开头+任意字符&quot;</span>
+ /^([<span style="margin: 0px; padding: 0px; color: rgb(174, 129, 255);">0</span>-<span style="margin: 0px; padding: 0px; color: rgb(174, 129, 255);">9</span>a-zA-Z]+)$/ 对应 <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;数字+字母任意组合&quot;</span>
+ /^([\s\S]+)$/ 对应 <span style="margin: 0px; padding: 0px; color: rgb(230, 219, 116);">&quot;未分类&quot;</span></pre></div></span>
+</div></body></html> 

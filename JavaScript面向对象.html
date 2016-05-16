@@ -1,0 +1,122 @@
+<html>
+<head>
+  <title>JavaScript面向对象</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="706"/>
+<h1>JavaScript面向对象</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div><b>创建对象</b></div><div><b><br/></b>工厂模式, 构造函数模式, 原型模式, 构造函数 and 原型 组合模式, 动态原型模式</div><div><br/></div><div>工厂模式</div><div><hr/>
+        function createPerson(name,age,job){<br/>
+                var obj=new Object();<br/>
+                obj.name=name;<br/>
+                obj.age=age;<br/>
+                obj.job=job;<br/>
+                obj.run=function(){<br/>
+                    return this.name+&quot;,&quot;+this.age+&quot;,&quot;+this.job;<br/>
+                };<br/>
+                return obj;<br/>
+        }<br/>
+        var person1=new createPerson('七娃','100','student');<br/>
+        var person2=new createPerson('三娃','100','student');<br/>
+        **注意：<br/>
+        this:表示当前作用域下的对象<br/>
+        缺点：每次new一个工厂都要创建Object这样会造成资源的浪费，并且new出来的工厂无法识别归属于哪个对象</div><div><br/></div><div><br/>
+构造函数模式</div><div><hr/>
+        function CreatePerson(name,age,job){<br/>
+                this.name=name;<br/>
+                this.age=age;<br/>
+                this.job=job;<br/>
+                this.run=function(){<br/>
+                        return this.name+&quot;,&quot;+this.age+&quot;,&quot;+this.job;<br/>
+                };<br/>
+        }<br/>
+        var person1=new CreatePerson('七娃','100','student');<br/>
+        var person2=new CreatePerson('三娃','100','student');<br/>
+        **注意：<br/>
+        构造函数模式是在工厂模式的基础上改良的。如下三点<br/>
+        1.构造函数没有new Object，因为他会自动 new 一个 Object<br/>
+        2.构造函数中的this 指代的就是后台自动创建的Object对象<br/>
+        3.构造函不需要返回值，因为他会自动返回<br/>
+        解决对象识别的问题：当我们有两个构造函数的时候就可以识别哪个构造函数属于哪个对象<br/>
+        问题：这里的run（）就只是做些简单的功能，没有必要多次初始化，如果能共享就好了（ps：看原型模式）</div><div><br/>
+对象冒充（call（）方法）：对象作用域之间的调用</div><div><hr/>
+        //构造函数<br/>
+        function CreatePerson(name,age,job){<br/>
+                this.name=name;<br/>
+                this.age=age;<br/>
+                this.job=job;<br/>
+                this.run=function(){<br/>
+                        return this.name+&quot;,&quot;+this.age+&quot;,&quot;+this.job;<br/>
+                };<br/>
+        }<br/>
+        //普通函数<br/>
+        var obj=new Object();<br/>
+        问题：想调用 obj中的run（）方法，可是 obj中没有run（）方法；<br/>
+        解决方法：让 obj冒充 CreatePerson；如下<br/>
+        CreatePerson.call(obj,&quot;五娃&quot;,&quot;100&quot;,&quot;student&quot;);<br/>
+        这时 obj就具有了run（）方法</div><div><br/>
+原型模式<br/><hr/>
+        function createPerson(){};                                        //构造函数里面定义的属性叫实例属性<br/>
+        createPerson.prototype.name=&quot;三娃&quot;;                        //用原型定义的属性叫原型属性<br/>
+        createPerson.prototype.age=100;<br/>
+        createPerson.prototype.run=function(){<br/>
+                alert(this.name+&quot;,&quot;+this.age);<br/>
+        };<br/>
+        var person1=new createPerson();<br/>
+        person1.run();<br/>
+        **注意：<br/>
+        原型中有个 constructor属性，其作用是让原型指向对象的prototype属性，就是关联作用<br/>
+        如果原型和构造函数中都有name属性，则采用就近原则，先实例属性，后原型属性<br/>
+        判断一个属性是实例属性还是原型属性用hasOwnProperty（）<br/>
+        person1.hasOwnProperty(&quot;name&quot;);<br/>
+        in操作符：不管是原型还是实例只要有就返回true<br/>
+        alert(&quot;name&quot; in person1);<br/>
+        通过hasOwnProperty和in操作符就可以检测属性是实体还是原型的。<br/>
+                return ！person1.hasOwnproperty(name) &amp;&amp;(name in person1);<br/>
+        原型模式下的属性和方法都是共享的，所以属性的值可以随便改，所有失去了独立性。<br/>
+        为了解决独立的问题，也就是让该独立的地方保存独立该共享的地方保持共享我们采用 &lt;  组合构造模式+原型模式 &gt;<br/><br/></div><div>组合构造模式+原型模式（需要独立的部分用构造函数，需要共享的部分用原型函数）</div><div><hr/>
+        function CreatePerson(name,age){<br/>
+                this.name=name;<br/>
+                this.age=age;<br/>
+                this.friends=[&quot;三娃&quot;,&quot;七娃&quot;];<br/>
+        }<br/>
+        CreatePerson.prototype={<br/>
+                constructor : CreatePerson,<br/>
+                run : function(){<br/>
+                        alert(this.name);<br/>
+                }<br/>
+        }<br/>
+        var person1=new CreatePerson(&quot;大娃&quot;,100);<br/>
+        person1.run();<br/>
+        ** 注意:这种方式很好的解决了独立与共享的问题，但是面向对象中有个重要的概念叫封装，这里是两个整体，没能很好的做到封装。（请看：动态原型模式） **</div><div><br/>
+动态原型模式</div><div><hr/>
+        function CreatePerson(name,age){<br/>
+                this.name=name;<br/>
+                this.age=age;<br/>
+                //因为我们对外共享的都是借口，所以只要先判断方法是不是属于function即可<br/>
+                if(typeof this.run !=&quot;function&quot;){<br/>
+                                CreatePerson.prototype.run=function(){<br/>
+                                        alert(this.name);<br/>
+                                };<br/>
+                }<br/>
+        }<br/>
+        var person1=new CreatePerson(&quot;三娃&quot;,&quot;100&quot;);<br/>
+        person1.run();<br/>
+        ** 注意:千万不要重写原型，只要重写原型那么以前原型以及数据就不存在了 **<br/>
+        <br/>
+寄生构造模式（工厂模式+构造函数）</div><div><hr/>
+        寄生构造模式与工厂模式的区别在于对象名称大学，仅此而已。</div><div><br/>
+稳妥构造模式</div><div><hr/>
+        稳妥构造模式就是在寄生构造函数的基础上不能使用new和this关键字。<br/><br/></div></span>
+</div></body></html> 

@@ -1,0 +1,89 @@
+<html>
+<head>
+  <title>ECMAScript</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="689"/>
+<h1>ECMAScript</h1>
+
+<div>
+<span bgcolor="#FFFFFF" style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><div style="font-size: 21px;"><strong>ECMAScript</strong></div><div style="font-size: 21px;"><hr/></div><div>JavaScript = ECMAScript + DOM + BOM</div><div><br/></div><div>ECMAScript 可以为不同种类的宿主环境提供核心的脚本编程能力，因此核心的脚本语言是与任何特定的宿主环境分开进行规定的</div><div>ECMAScript 仅仅是一个描述，定义了脚本语言的所有属性、方法和对象。</div><div>Web 浏览器对于 ECMAScript 来说是一个宿主环境，但它并不是唯一的宿主环境。</div><div style="font-size: 21px;"><span style="font-size: medium;"><br/></span></div><div style="font-size: 21px;"><strong>ECMAScript语法</strong></div><div><hr/></div><div>;                                        结束符(每行分号可有可无)</div><div>//                                       单行注释   </div><div> /**/                                   多行注释</div><div>{ }                                       表示代码块</div><div>TEST 和test是不同的     区分大小写 </div><div>变量是弱类型的               可以随时改变变量所存数据的类型(尽量避免这样做)</div><div>忽略多余空格</div><div><br/></div><div style="font-size: 21px;"><strong>ECMAScript</strong><strong>变量</strong></div><div><hr/></div><div>--第一个字符必须是字母,下划线 或 $</div><div>--余下字符可以是下划线,美元符号,字母,数字</div><div><br/></div><div>--无需明确的类型声明</div><div>var arr = ['2','1','3'];</div><div><br/></div><div>--用同一个var语句定义的变量不必具有相同的类型</div><div>var name = 'raymond', age = 25;</div><div><br/></div><div>--不一定要初始化</div><div>var test;</div><div> </div><div>--可以存放不同类型的值</div><div>var test = 'raymond'; </div><div>var test = 111; </div><div><br/></div><div style="font-size: 21px;"><b>ECMAScript值</b></div><div style="font-size: 21px;"><hr/></div><div><br/></div><div>在ECMAScript中, 变量可以存在两种类型的值,即<b>原始值</b>和<b>引用值</b></div><div><br/></div><div><b>原始值 -</b> 存储在栈( stack )中的简单数据段,它们的值直接存储在变量访问的位置.</div><div><br/></div><div><b>引用值</b> <b>-</b> 存储在堆( heap )中的对象, 存储在变量处的值是一个指针( point ),指向存储对象的内存处</div><div><br/></div><div>     为变量赋值时，ECMAScript 的解释程序必须判断该值是原始类型，还是引用类型。要实现这一点，解释程序则需尝试判断该值是否为 ECMAScript 的原始类型之一。由于这些原始类型占据的空间是固定的，所以可将他们存储在较小的内存区域 - 栈中。这样存储便于迅速查寻变量的值。</div><div><br/>
+     在许多语言中，字符串都被看作引用类型，而非原始类型，因为字符串的长度是可变的。ECMAScript 打破了这一传统。</div><div><br/>
+     如果一个值是引用类型的，那么它的存储空间将从堆中分配。由于引用值的大小会改变，所以不能把它放在栈中，否则会降低变量查寻的速度。相反，放在变量的栈空间中的值是该对象存储在堆中的地址。地址的大小是固定的，所以把它存储在栈中对变量性能无任何负面影响。如下图所示：</div><div><br/></div><div>基本数据类型</div><div>Undefined  Null  Boolean  Number  String</div><div><br/></div><div>复杂数据类型</div><div>Object  本质是由一组无序的名值对组成的</div><div><br/></div><div>Primitive type</div><div>Number, String, Boolean</div><div><br/></div><div>Reference type</div><div>Object </div><div> - Function</div><div> - Array</div><div> - Date</div><div> - RexExp</div><div><br/></div><div>最佳方法:</div><div>Object.prototype.toString.call(a);   利用</div><div>a.constructor.prototype;</div><div><br/></div><div>字面值 Undefined 的主要目的是用于比较</div><div>对于尚未声明过的变量,只能执行一项操作,即 使用typeof 操作符检测其数据类型</div><div>即便未初始化的变量会自动被赋予 undefined 值,但显式地初始化变量依然是明智的选择。<br/>
+从逻辑角度来看,null 值表示一个空对象指针,而这也正是使用 typeof 操作符检测 null 值时会返回&quot;object”的原因。</div><div><br/></div><div>var x ;                                                   undefined  表示变量不含有值</div><div>var x = null;                                           null 可以用来清空变量</div><div>var x = 6;                                              Number</div><div>var x = &quot;Bill&quot;;                                         String</div><div>var x = 123e5;                                       指数</div><div>var x = true;                                          Boolean</div><div>var x = [1, 2, 3];                                    Array</div><div>var x = {name:'raymond',age:23};           Object </div><div><br/></div><div>判断一个变量是否字符串</div><div>var a ='raymond';     typeof a;                   //string</div><div>var a = new String('raymond');     typeof a;  //object     原因Javascript自动装箱机制</div><div><br/></div><div><br/></div><div style="font-size: 21px;"><b>ECMAScript语句</b></div><div style="font-size: 21px;"><hr/></div><div style="font-size: 21px;"><strong>if--</strong></div><div>if(num==8)</div><div>return;</div><div><br/></div><div>if (num&gt;8)</div><div>  { alert(0); }</div><div>else</div><div>  { alert(1);}</div><div><br/></div><div style="font-size: 21px;"><strong>switch--</strong></div><div>switch(n)</div><div>  { case 1:</div><div>     code;</div><div>     break;</div><div>     default:</div><div>     code;</div><div>  }</div><div><br/></div><div style="font-size: 21px;"><strong>for--</strong></div><div>for(var i=0;i&lt;10;i++)</div><div>  {  code  }</div><div><br/></div><div style="font-size: 21px;"><strong>for/In--</strong></div><div>for (x in person)</div><div>  { txt = txt + person[x]; }</div><div><br/></div><div style="font-size: 21px;"><strong>while--</strong></div><div>while ( i&lt;5 )</div><div> {</div><div>    i小于5就执行;</div><div>    需要执行的代码</div><div>    i++;</div><div> }</div><div><br/></div><div style="font-size: 21px;"><strong>do while--</strong></div><div>do</div><div>{</div><div>  需要执行的代码</div><div>}</div><div>while (条件);</div><div>  break; 跳出循环</div><div>  continue 如果出现了指定的条件，然后继续循环中的下一个迭代。</div><div>}</div><div><br/></div><div style="font-size: 21px;"><strong>try catch throw--</strong></div><div>function message(){</div><div>  try{</div><div>    //执行代码</div><div>    var x=1;</div><div>    if(x==1) throw 'ONE';//自定义抛出错误}</div><div>    catch(err){</div><div>      // 在这里处理错误</div><div>     alert(err);}</div><div>}</div><div><br/></div><div><br/></div><div style="font-size: 21px;"><strong>Javascript 对象</strong></div><div><hr/></div><div>1.JavaScript 中的所有事物都是对象：字符串、数字、数组、日期，等等。</div><div>2.在 JavaScript 中，对象是拥有属性和方法的数据。</div><div><br/></div><div>属性是与对象相关的值。                    car.name = bate;</div><div>方法是能够在对象上执行的动作。       car.start();</div><div><br/></div><div>在 JavaScript 中，对象是数据（变量），拥有属性和方法。</div><div>var txt =&quot;hello&quot;   属性 txt.length     方法      txt.indexOf()    txt.replace()     txt.search()</div><div><br/></div><div>访问对象的属性：objectName.propertyName     (对象名.属性名)</div><div>访问对象的方法：objectName.methodName()     (对象名.方法())</div><div><br/></div><div><br/></div><div style="font-size: 21px;"><b>ECMAScript 定义类和对象</b></div><div><hr/>
+原始方式:</div><div><pre style="margin-top: 10px; margin-bottom: 0px; padding: 10px; border: 1px dotted rgb(119, 136, 85); width: 685px; font-size: 12px; text-align: left; background-color: rgb(245, 245, 245); background-position: initial initial; background-repeat: initial initial;">
+var oCar = new Object;
+oCar.color = &quot;blue&quot;;
+oCar.doors = 4;
+oCar.mpg = 25;
+oCar.showColor = function() {
+  alert(this.color);
+};
+</pre></div><div><br/></div><div>工厂方式:</div><div><pre style="margin-top: 10px; margin-bottom: 0px; padding: 10px; border: 1px dotted rgb(119, 136, 85); width: 685px; font-size: 12px; text-align: left; background-color: rgb(245, 245, 245); background-position: initial initial; background-repeat: initial initial;">
+function createCar() {
+  var oTempCar = new Object;
+  oTempCar.color = &quot;blue&quot;;
+  oTempCar.doors = 4;
+  oTempCar.mpg = 25;
+  oTempCar.showColor = function() {
+    alert(this.color);
+  };
+  return oTempCar;
+}
+
+var oCar1 = createCar();
+var oCar2 = createCar();
+</pre></div><div><br/></div><div>构造函数:</div><div><pre style="margin-top: 10px; margin-bottom: 0px; padding: 10px; border: 1px dotted rgb(119, 136, 85); width: 685px; font-size: 12px; text-align: left; background-color: rgb(245, 245, 245); background-position: initial initial; background-repeat: initial initial;">
+function Car(sColor,iDoors,iMpg) {
+  <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">this</code>.color = sColor;
+  <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">this</code>.doors = iDoors;
+  <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">this</code>.mpg = iMpg;
+  <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">this</code>.showColor = function() {
+    alert(this.color);
+  };
+}
+
+var oCar1 = <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">new</code> Car(&quot;red&quot;,4,23);
+var oCar2 = <code style="margin: 0px; padding: 0px; border: 0px; font-family: &amp;amp;apos;Courier New&amp;amp;apos;, Courier, monospace; color: rgb(0, 0, 221);">new</code> Car(&quot;blue&quot;,3,25);
+</pre></div><div><br/></div><div>原型方式:</div><div><pre style="margin-top: 10px; margin-bottom: 0px; padding: 10px; border: 1px dotted rgb(119, 136, 85); width: 685px; font-size: 12px; text-align: left; background-color: rgb(245, 245, 245); background-position: initial initial; background-repeat: initial initial;">
+unction Car() {
+}
+
+Car.prototype.color = &quot;blue&quot;;
+Car.prototype.doors = 4;
+Car.prototype.mpg = 25;
+Car.prototype.showColor = function() {
+  alert(this.color);
+};
+
+var oCar1 = new Car();
+var oCar2 = new Car();
+</pre></div><div><br/></div><div>混合的构造函数/原型方式</div><div><hr/></div><div><pre style="margin-top: 10px; margin-bottom: 0px; padding: 10px; border: 1px dotted rgb(119, 136, 85); width: 685px; font-size: 12px; text-align: left; background-color: rgb(245, 245, 245); background-position: initial initial; background-repeat: initial initial;">
+function Car(sColor,iDoors,iMpg) {
+  this.color = sColor;
+  this.doors = iDoors;
+  this.mpg = iMpg;
+  this.drivers = new Array(&quot;Mike&quot;,&quot;John&quot;);
+}
+
+Car.prototype.showColor = function() {
+  alert(this.color);
+};
+
+var oCar1 = new Car(&quot;red&quot;,4,23);
+var oCar2 = new Car(&quot;blue&quot;,3,25);
+
+oCar1.drivers.push(&quot;Bill&quot;);
+
+alert(oCar1.drivers);   <span style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 153, 153);">//输出 &quot;Mike,John,Bill&quot;</span>
+alert(oCar2.drivers);   <span style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 153, 153);">//输出 &quot;Mike,John&quot;</span></pre></div><div><br/></div><div><br/></div><div><b>弱类型</b></div><div>3*'3'</div><div>&gt;9</div><div><br/></div><div>3+'3'</div><div>&gt; 33</div><div><br/></div><div>+'3'</div><div>&gt; 3</div><div><br/></div><div>+new Date</div><div>&gt;1424413456308</div><div><br/></div><div>'010'|0</div><div>&gt;10</div><div><br/></div><div>parseInt('010');</div><div>&gt;8</div><div><br/></div><div>parseInt('010', 10);</div><div>&gt;10</div><div><br/></div><div><br/></div><div>数值型是&quot;double-precision 64-bit IEEE 754 values&quot;</div><div>0.1+0.2</div><div>&gt; 0.30000000000000004</div><div><br/></div><div><b>一切皆对象</b></div><div><br/></div><div>true.toString()</div><div>&gt; 'true'</div><div><br/></div><div>(2).toString()</div><div>&gt;'2'</div><div><br/></div><div>'test'.split('')</div><div>&gt;['t', 'e', 's', 't']</div><div><br/></div><div>'test'.charAt(0)</div><div>&gt;'t'</div><div><br/></div><div>Number.prototype.length = function(){</div><div>     return (this +'').length;</div><div>}</div><div>(10086).length</div><div>&gt;5</div><div><br/></div><div><br/></div><div><b>布尔类型的特点</b></div><div>0, &quot;&quot;, NaN, null, undefined为false,其他皆为true</div><div><br/></div><div>!!null</div><div>&gt; false</div><div>!!undefined</div><div>&gt; false</div><div>!![]</div><div>&gt; true</div><div>!!{}</div><div>&gt; true</div><div><br/></div><div><b>reference类型的特点</b></div><div>var a = {name:&quot;raymond&quot;};</div><div>var b = a;</div><div>b.name = 'Yip';</div><div><br/></div><div>a.name </div><div>&gt; 'Yip'</div><div>b.name</div><div>&gt; 'Yip' </div><div><br/></div><div>对象是 prototype-base实现继承</div><div><br/></div><div>Object.prototype.newMethod = function(){</div><div>   console.log('被污染了');</div><div>}</div><div><br/></div><div>(2).newMethod()</div><div>&gt; '被污染了'</div><div><br/></div><div>变量..</div><div><br/></div><div>全局变量</div><div><br/></div><div>皆是 window 的成员</div><div><br/></div><div>没用 var 声明的 变量会被转换为 全局变量</div><div><br/></div><div>页面unload后会被 GC回收</div><div><br/></div><div>全局变量是 evil</div><div><br/></div><div>局部变量</div><div><br/></div><div>定义在函数体内</div><div><br/></div><div>函数执行完,若未被其他对象引用便会被GC回收</div><div><br/></div><div>Scope chains(作用域链)</div><div>- 影响执行效率的重要因素</div><div>- 实现JavaScript 动态特性的基础机制</div><div><br/></div><div><hr/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div><div><br/></div></span>
+</div></body></html> 

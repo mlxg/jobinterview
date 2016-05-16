@@ -1,0 +1,271 @@
+<html>
+<head>
+  <title>Web安全</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="678"/>
+<h1>Web安全</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+	<div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>What is XSS?</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<hr/>
+		</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><a href="http://www.cnblogs.com/TankXiao/archive/2012/03/21/2337194.html">XSS</a>  全称( Cross Site Scripting ) 跨站脚本攻击.</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">Web程序中最常见的漏洞.</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">指攻击者在网页中嵌入客户端脚本, 当用户浏览此网页时, 脚本就会在用户的浏览器上执行.</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">从而达到攻击者的目的. 比如获取用户的 Cookie, 导航到恶意网站, 携带木马等.</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>XSS</strong>攻击通常指的是通过利用网页开发时留下的漏洞，通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>检测方法</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<hr/>
+		</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">通常有一些方式可以测试网站是否有正确处理特殊字符：</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&gt;&lt;script&gt;alert(document.cookie)&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">='&gt;&lt;script&gt;alert(document.cookie)&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&quot;&gt;&lt;script&gt;alert(document.cookie)&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;script&gt;alert(document.cookie)&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;script&gt;alert(vulnerable)&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">%3Cscript%3Ealert('XSS')%3C/script%3E</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;script&gt;alert('XSS')&lt;/script&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;img src=&quot;javascript:alert('XSS')&quot;&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;img src=&quot;http://xxx.com/yyy.png&quot; onerror=&quot;alert('XSS')&quot;&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>攻击手段和目的</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<hr/>
+		</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">攻击者使被攻击者在浏览器中执行脚本后，如果需要收集来自被攻击者的数据（如cookie或其他敏感信息），可以自行架设一个网站，让被攻击者通过JavaScript等方式把收集好的数据作为参数提交，随后以<a href="http://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>等形式记录在攻击者自己的服务器上。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">常用的<strong>XSS</strong>攻击手段和目的有：</div>
+		<ul style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<li>盗用 cookie ，获取敏感信息。</li>
+			<li>利用植入 Flash ，通过 <a href="http://zh.wikipedia.org/w/index.php?title=Crossdomain&amp;amp;amp;amp;amp;amp;amp;amp;action=edit&amp;amp;amp;amp;amp;amp;amp;amp;redlink=1">crossdomain</a> 权限设置进一步获取更高权限；或者利用Java等得到类似的操作。</li>
+			<li>利用 iframe、frame、XMLHttpRequest或上述Flash等方式，以（被攻击）用户的身份执行一些管理动作，或执行一些一般的如发<a href="http://zh.wikipedia.org/wiki/%E5%BE%AE%E5%8D%9A">微博</a>、加好友、发私信等操作。</li>
+			<li>利用可被攻击的域受到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动。</li>
+			<li>在访问量极大的一些页面上的XSS可以攻击一些小型网站，实现<a href="http://zh.wikipedia.org/wiki/DDoS">DDoS</a>攻击的效果。</li>
+		</ul>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>漏洞的防御和利用</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<hr/>
+		</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>过滤特殊字符</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">避免XSS的方法之一主要是将使用者所提供的内容进行过滤，许多语言都有提供对<a href="http://zh.wikipedia.org/wiki/HTML">HTML</a>的过滤</div>
+		<ul style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<li><a href="http://zh.wikipedia.org/wiki/PHP">PHP</a>的htmlentities()或是htmlspecialchars()。</li>
+			<li><a href="http://zh.wikipedia.org/wiki/Python">Python</a>的cgi.escape()。</li>
+			<li><a href="http://zh.wikipedia.org/wiki/ASP">ASP</a>的Server.HTMLEncode()。</li>
+			<li><a href="http://zh.wikipedia.org/wiki/ASP.NET">ASP.NET</a>的Server.HtmlEncode()或功能更强的<a href="http://msdn.microsoft.com/en-us/library/aa973813.aspx">Microsoft Anti-Cross Site Scripting Library</a></li>
+			<li><a href="http://zh.wikipedia.org/wiki/Java">Java</a>的<a href="http://code.google.com/p/xssprotect/">xssprotect(Open Source Library)</a>。</li>
+			<li><a href="http://zh.wikipedia.org/wiki/Node.js">Node.js</a>的node-validator。</li>
+		</ul>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>使用</strong><strong><a href="http://zh.wikipedia.org/w/index.php?title=HTTP%E5%A4%B4&amp;amp;amp;amp;amp;amp;amp;amp;action=edit&amp;amp;amp;amp;amp;amp;amp;amp;redlink=1">HTTP头</a></strong><strong>指定类型</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">很多时候可以使用<a href="http://zh.wikipedia.org/w/index.php?title=HTTP%E5%A4%B4&amp;amp;amp;amp;amp;amp;amp;amp;action=edit&amp;amp;amp;amp;amp;amp;amp;amp;redlink=1">HTTP头</a>指定内容的类型，使得输出的内容避免被作为HTML解析。如在<a href="http://zh.wikipedia.org/wiki/PHP">PHP</a>语言中使用以下代码：</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">&lt;?php</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">  header('Content-Type: text/javascript; charset=utf-8');</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">?&gt;</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">即可强行指定输出内容为文本/JavaScript脚本（顺便指定了内容编码），而非可以引发攻击的HTML。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>过滤尖括号</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">防范xss的关键是过滤所有的‘&lt;’和‘&gt;’字符，确保从后端而来的数据并不带有任何的html标签，xss的危险在于有不可预料的前端脚本，但是值得注意的是，不单只有script标签是可以运行脚本的，任何的html标签都可以加上类似onclick，onload这样的事件也都可以运行脚本，所以需要过滤所有的‘&lt;’和‘&gt;’字符。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">假如，从后端而来的数据一定需要带上html标签（比如编辑器的富文本），且内容并不能保证是安全的（并不是可靠的人员录入的），就需要有合适的规则去“净化”它们。这个有现成的工具，比如<a href="http://htmlpurifier.org/">HTML Purifier</a>。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><strong>CSRF</strong></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">
+			<hr/>
+		</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><a href="http://www.ibm.com/developerworks/cn/web/1102_niugang_csrf/">CSRF</a>（Cross-site request forgery跨站请求伪造，也被称为“one click attack”或者session riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。尽管听起来像跨站<a href="http://baike.baidu.com/view/54.htm">脚本</a>（XSS），但它与XSS非常不同，并且攻击方式几乎相左。XSS利用站点内的信任用户，而CSRF则通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击往往不大流行（因此对其进行防范的资源也相当稀少）和难以防范，所以被认为比XSS更具危险性。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">防范csrf的前提是首先避免xss，xss如果都不能防止，那防止csrf就扯蛋了。。。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">防范csrf的第一点是对于数据库的更改操作（insert、update和delete），表单必须使用post请求。这是为了防止类似于在一个img和src里面写一个路径，让用户错误访问改动数据库的问题。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;">做完第一点还不够，因为html表单的action是可以跨域提交的，用户在一个网站提交到另一个网站，可能他还不知情，这就需要确保用户的来源表单是可信的，一般的做法是在表单里面<strong>添加一段隐藏的唯一的token</strong>，像sessionId那样可以验明用户的身份，接收表单的同时确认这个token的有效性。</div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><span style="color: rgb(34, 34, 34); font-family: Arial, sans-serif; font-size: 15px; line-height: 22.3871994018555px;"><b>验证 HTTP Referer 字段；</b></span></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><span style="color: rgb(34, 34, 34); font-family: Arial, sans-serif; font-size: 15px; line-height: 22.3871994018555px;"><b>在请求地址中添加 token 并验证；</b></span></div>
+		<div style="color: rgb(0, 0, 0); font-family: Tahoma; line-height: normal; font-size: medium;"><span style="color: rgb(34, 34, 34); font-family: Arial, sans-serif; font-size: 15px; line-height: 22.3871994018555px;"><b>在 HTTP 头中自定义属性并验证。</b></span></div>
+	</div>
+	<div>
+		<h1>常见攻击方式</h1>
+		<p>一般说来，在Web安全领域，常见的攻击方式大概有以下几种：<br/>
+1、SQL注入攻击<br/>
+2、跨站脚本攻击 - XSS<br/>
+3、跨站伪造请求攻击 - CSRF<br/>
+4、文件上传漏洞攻击<br/>
+5、分布式拒绝服务攻击 - DDOS</p>
+		<h1>SQL注入常见攻击技巧</h1>
+		<p><br/></p>
+		<h1>如何确定SQL注入漏洞</h1>
+		<p><br/></p>
+		<h2>1、错误提示</h2>
+		<p>如果目标Web网站开启了错误显示，攻击者就可以通过反复调整发送的参数、查看页面打印的错误信息，推测出Web网站使用的数据库和开发语言等重要信息。</p>
+		<p>除非运维人员疏忽，否则大部分的Web运营网站应该都关闭了错误提示信息，此时攻击者一般会采用盲注的技巧来进行反复的尝试判断。 仍然以上面的数据表user为例，我们之前的查看会员详情页面的url地址为<code>userinfo.php?username=plhwin</code>，此时黑客分别访问<code>userinfo.php?username=plhwin' AND 1=1-- hack</code>和<code>userinfo.php?username=plhwin' AND 1=2-- hack</code>，如果前者访问能返回正常的信息而后者不能，就基本可以判断此网站存在SQL注入漏洞，因为后者的<code>1=2</code>这个表达式永远不成立，所以即使username传入了正确的参数也无法通过，由此可以推断这个页面存在SQL注入漏洞，并且可以通过<code>username</code>参数进行注入。</p>
+		<h1>如何防御SQL注入</h1>
+		<p>对于服务器配置层面的防范，应该保证生产环境的Webserver是关闭错误信息的</p>
+		<div>但凡有SQL注入漏洞的程序，都是因为程序要接受来自客户端用户输入的变量或URL传递的参数，并且这个变量或参数是组成SQL语句的一部分，对于用户输入的内容或传递的参数，我们应该要时刻保持警惕，这是安全领域里的「外部数据不可信任」的原则，纵观Web安全领域的各种攻击方式，大多数都是因为开发者违反了这个原则而导致的，所以自然能想到的，就是从变量的检测、过滤、验证下手，确保变量是开发者所预想的。</div>
+		<h2>1、检查变量数据类型和格式</h2>
+		<p>如果你的SQL语句是类似<code>where id={$id}</code>这种形式，数据库里所有的id都是数字，那么就应该在SQL被执行前，检查确保变量id是int类型；如果是接受邮箱，那就应该检查并严格确保变量一定是邮箱的格式，其他的类型比如日期、时间等也是一个道理。总结起来：<strong>只要是有固定格式的变量，在SQL语句执行前，应该严格按照固定格式去检查，确保变量是我们预想的格式</strong>，这样很大程度上可以避免SQL注入攻击。</p>
+		<p>比如，我们前面接受<code>username</code>参数例子中，我们的产品设计应该是在用户注册的一开始，就有一个用户名的规则，比如<code>5-20个字符，只能由大小写字母、数字以及一些安全的符号组成，不包含特殊字符</code>。此时我们应该有一个<code>check_username</code>的函数来进行统一的检查。不过，仍然有很多例外情况并不能应用到这一准则，比如文章发布系统，评论系统等必须要允许用户提交任意字符串的场景，这就需要采用过滤等其他方案了。</p>
+		<h2>2、过滤特殊符号</h2>
+		<p>对于无法确定固定格式的变量，一定要进行特殊符号过滤或转义处理。以PHP为例，通常是采用<code>addslashes</code>函数，它会在指定的预定义字符前添加反斜杠转义，这些预定义的字符是：<code>单引号 (') 双引号 (&quot;) 反斜杠 (\) NULL</code>。</p>
+		<p>来看2条SQL语句：</p>
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<pre>1
+2
+3
+</pre>
+						</td>
+						<td>
+							<pre> = isset($_GET['uid']) ? $_GET['uid'] : ;
+ = addslashes(uid);
+ = &quot;SELECT uid,username FROM user WHERE uid='{}'&quot;;
+</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<pre>1
+2
+3
+</pre>
+						</td>
+						<td>
+							<pre> = isset($_GET['uid']) ? $_GET['uid'] : ;
+ = addslashes(uid);
+ = &quot;SELECT uid,username FROM user WHERE uid={}&quot;;
+</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p>上面两个查询语句都经过了php的addslashes函数过滤转义，但在安全性上却大不相同，在MySQL中，对于int类型字段的条件查询，上面个语句的查询效果完全一样，由于第一句SQL的变量被单引号包含起来，SQL注入的时候，黑客面临的首要问题是必须要先闭合前面的单引号，这样才能使后面的语句作为SQL执行，并且还要注释掉原SQL语句中的后面的单引号，这样才可以成功注入，由于代码里使用了addslashes函数，黑客的攻击会无从下手，但第二句没有用引号包含变量，那黑客也不用考虑去闭合、注释，所以即便同样采用addslashes转义，也还是存在SQL攻击漏洞。</p>
+		<p>对于PHP程序+MySQL构架的程序，在动态的SQL语句中，使用单引号把变量包含起来配合<code>addslashes</code>函数是应对SQL注入攻击的有效手段，但这做的还不够，像上面的2条SQL语句，根据「检查数据类型」的原则，uid都应该经过<code>intval</code>函数格式为int型，这样不仅能有效避免第二条语句的SQL注入漏洞，还能使得程序看起来更自然，尤其是在NoSQL(如MongoDB)中，变量类型一定要与字段类型相匹配才可以。</p>
+		<p>从上面可以看出，第二个SQL语句是有漏洞的，不过由于使用了addslashes函数，你会发现黑客的攻击语句也存在不能使用特殊符号的条件限制，类似<code>where username='plhwin'</code>这样的攻击语句是没法执行的，但是黑客可以将字符串转为16进制编码数据或使用<code>char</code>函数进行转化，同样能达到相同的目的，如果对这部分内容感兴趣，可以<a href="http://cbb.sjtu.edu.cn/course/database/lab8.htm">点击这里查看</a>。而且由于SQL保留关键字，如「HAVING」、「ORDER BY」的存在，即使是基于黑白名单的过滤方法仍然会有或多或少问题，那么是否还有其他方法来防御SQL注入呢？</p>
+		<h2>3、绑定变量，使用预编译语句</h2>
+		<p>MySQL的<code>mysqli</code>驱动提供了预编译语句的支持，不同的程序语言，都分别有使用预编译语句的方法，我们这里仍然以PHP为例，编写<code>userinfo2.php</code>代码：</p>
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre>
+						</td>
+						<td>
+							<pre>&lt;?php
+header('Content-type:text/html; charset=UTF-8');
+$username = isset($_GET['username']) ? $_GET['username'] : ;
+$userinfo = array();
+($username){
+        //使用mysqli驱动连接demo数据库
+        $mysqli =  mysqli(&quot;localhost&quot;, &quot;root&quot;, &quot;root&quot;, 'demo');
+        //使用问号替代变量位置
+         = &quot;SELECT uid,username FROM user WHERE username=?&quot;;
+        $stmt = $mysqli-&gt;prepare();
+        //绑定变量
+        $stmt-&gt;bind_param(, $username);
+        $stmt-&gt;execute();
+        $stmt-&gt;bind_result(, $username);
+        while ($stmt-&gt;fetch()) {
+             = array();
+            ['uid'] = ;
+            ['username'] = $username;
+            $userinfo[] = ;
+        }
+}
+ '&lt;pre&gt;',print_r($userinfo, ),'&lt;/pre&gt;';
+</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p>从上面的代码可以看到，我们程序里并没有使用<code>addslashes</code>函数，但是浏览器里运行 <code>http://localhost/test/userinfo2.php?username=plhwin' AND 1=1-- hack</code>里得不到任何结果，说明SQL漏洞在这个程序里并不存在。</p>
+		<p>实际上，绑定变量使用预编译语句是预防SQL注入的最佳方式，使用预编译的SQL语句语义不会发生改变，在SQL语句中，变量用问号<code>?</code>表示，黑客即使本事再大，也无法改变SQL语句的结构，像上面例子中，username变量传递的<code>plhwin' AND 1=1-- hack</code>参数，也只会当作username字符串来解释查询，从根本上杜绝了SQL注入攻击的发生。</p>
+		<h1>数据库信息加密安全</h1>
+		<p>相信大家都还对2011年爆出的CSDN拖库事件记忆犹新，这件事情导致CSDN处在风口浪尖被大家痛骂的原因就在于他们竟然明文存储用户的密码，这引发了科技界对用户信息安全尤其是密码安全的强烈关注，我们在防范SQL注入的发生的同时，也应该未雨绸缪，说不定下一个被拖库的就是你，谁知道呢。</p>
+		<p>在Web开发中，传统的加解密大致可以分为三种:</p>
+		<p>1、对称加密：即加密方和解密方都使用相同的加密算法和密钥，这种方案的密钥的保存非常关键，因为算法是公开的，而密钥是保密的，一旦密匙泄露，黑客仍然可以轻易解密。常见的对称加密算法有：<code>AES</code>、<code>DES</code>等。</p>
+		<p>2、非对称加密：即使用不同的密钥来进行加解密，密钥被分为公钥和私钥，用私钥加密的数据必须使用公钥来解密，同样用公钥加密的数据必须用对应的私钥来解密，常见的非对称加密算法有：<code>RSA</code>等。</p>
+		<p>3、不可逆加密：利用哈希算法使数据加密之后无法解密回原数据，这样的哈希算法常用的有：<code>md5</code>、<code>SHA-1</code>等。</p>
+		<p>在我们上面登录系统的示例代码中，<code>$md5password = md5($password);</code>从这句代码可以看到采用了md5的不可逆加密算法来存储密码，这也是多年来业界常用的密码加密算法，但是这仍然不安全。为什么呢？</p>
+		<p>这是因为md5加密有一个特点：同样的字符串经过md5哈希计算之后生成的加密字符串也是相同的，由于业界采用这种加密的方式由来已久，黑客们也准备了自己强大的md5彩虹表来逆向匹配加密前的字符串，这种用于逆向反推MD5加密的彩虹表在互联网上随处可见，在Google里使用<code>md5 解密</code>作为关键词搜索，一下就能找到<a href="http://www.cmd5.com/">md5在线破解网站</a>，把我们插入用户数据时候的MD5加密字符串<code>e10adc3949ba59abbe56e057f20f883e</code>填入进去，瞬间就能得到加密前的密码：<code>123456</code>。当然也并不是每一个都能成功，但可以肯定的是，这个彩虹表会越来越完善。</p>
+		<p>所以，我们有迫切的需求采用更好的方法对密码数据进行不可逆加密，通常的做法是为每个用户确定不同的密码加盐（salt）后，再混合用户的真实密码进行md5加密，如以下代码：</p>
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
+						</td>
+						<td>
+							<pre>&lt;?php
+//用户注册时候设置的password
+$password = $_POST['password'];
+//md5加密，传统做法直接将加密后的字符串存入数据库，但这不够，我们继续改良
+$passwordmd5 = md5($password);
+//为用户生成不同的密码盐，算法可以根据自己业务的需要而不同
+$salt = substr(uniqid(rand()), -);
+//新的加密字符串包含了密码盐
+$passwordmd5 = md5($passwordmd5.$salt);
+</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p>1、不要随意开启生产环境中Webserver的错误显示。<br/>
+2、永远不要信任来自用户端的变量输入，有固定格式的变量一定要严格检查对应的格式，没有固定格式的变量需要对引号等特殊字符进行必要的过滤转义。<br/>
+3、使用预编译绑定变量的SQL语句。<br/>
+4、做好数据库帐号权限管理。<br/>
+5、严格加密处理用户的机密信息。</p>
+	</div><br/>
+
+
+</span>
+</div></body></html> 

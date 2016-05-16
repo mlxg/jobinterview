@@ -1,0 +1,203 @@
+<html>
+<head>
+  <title>HTTP</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/274870; Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="676"/>
+<h1>HTTP</h1>
+
+<div>
+<span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+	<div><strong>HTTP</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>超文本传输​​协议（HTTP）的目的是使客户端和服务器之间的通信。</div>
+	<div><br/></div>
+	<div>HTTP作为一个客户端和服务器之间的请求 - 响应协议。</div>
+	<div><br/></div>
+	<div>Web浏览器可能是客户端，而承载网站可能是服务器的计算机上的应用程序。</div>
+	<div><br/></div>
+	<div>例如：客户端（浏览器）提交的HTTP请求到服务器; 然后服务器返回给客户端的响应。</div>
+	<div>该响应包含有关该请求的状态信息，并且还可以包含所请求的内容。</div>
+	<div><br/></div>
+	<div>两个用于客户端和服务器之间的请求 - 响应常用的方法有：GET和POST。</div>
+	<ul>
+		<li>GET -从指定的资源请求的数据</li>
+		<li>POST -数据提交到被加工成指定的资源</li>
+	</ul>
+	<div><strong>GET</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>查询字符串（名称/值对）的GET请求的URL发送：</div>
+	<div>/test/demo_form.asp?name1=value1&amp;name2=value2</div>
+	<div>对GET请求其他一些注意事项：</div>
+	<div><br/></div>
+	<div>  * GET请求可以被缓存</div>
+	<div>  * GET请求留在浏览器历史记录</div>
+	<div>  * GET请求可以被收藏</div>
+	<div>  * 时获得敏感数据处理的要求不应该被使用</div>
+	<div>  * GET请求有长度限制2k 2048</div>
+	<div>  * GET请求应该只用于检索数据</div>
+	<div><br/></div>
+	<div><strong>POST</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>查询字符串（名称/值对）的POST请求的HTTP邮件正文发送：</div>
+	<div>POST /test/demo_form.asp HTTP/1.1</div>
+	<div>Host: w3schools.com</div>
+	<div>name1=value1&amp;name2=value2</div>
+	<div>在POST请求的一些其他注意事项：</div>
+	<div><br/></div>
+	<div>  * POST请求不会被缓存</div>
+	<div>  * POST请求不要停留在浏览器历史记录</div>
+	<div>  * POST请求不能书签</div>
+	<div>  * POST请求对数据长度没有限制</div>
+	<div><br/></div>
+	<div><strong>Other HTTP REQUEST Method</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>HEAD          Same as GET but returns only HTTP headers and no document body</div>
+	<div><br/></div>
+	<div>PUT             Uploads a representation of the specified URI</div>
+	<div><br/></div>
+	<div>DELETE        Deletes the specified resource</div>
+	<div><br/></div>
+	<div>OPTIONS      Returns the HTTP methods that the server supports</div>
+	<div><br/></div>
+	<div>CONNECT     Converts the request connection to a transparent TCP/IP tunnel</div>
+	<div><br/></div>
+	<div><strong>HTTP STATUS</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>200     请求成功</div>
+	<div>206     断点下载时用到，客户端请求了一部分内容，服务器成功把这部分内容返回给它，这时候就是用这个状态。</div>
+	<div>301     永久跳转，原地址不存在了，url被指向到另一个地址。这个主要是搜索引擎相关，影响爬虫的检索行为。</div>
+	<div>302     重定向;临时跳转，服务器会返回一个新的url给客户端，客户端可以继续访问这个url来获取内容。</div>
+	<div>304     缓存;资源没有改变，客户端可以使用本地缓存的内容，常见于静态内容访问。</div>
+	<div>403     请求被服务器拒绝</div>
+	<div>404     Not Found 找不到资源</div>
+	<div>413     请求实体太大。常见的情况是上传大文件，但超出了服务器(比如nginx)限制。或者请求头或请求体超出了后端的server(比如tomcat)的设置（比如当前域名下cookie太多，超出了请求头限制）</div>
+	<div>416     跟断点续传有关，客户端请求的范围超出了服务器上文件大小。</div>
+	<div>500     服务器内部错误，不能返回正常的结果。比如最常见的应用抛出空指针异常未进行处理。</div>
+	<div>502     网关错误。常见的情况是反向代理后端的服务器(比如resin或tomcat)没有启动。</div>
+	<div>503     服务不可用。比如服务器负载太高或者服务器已经停止服务。</div>
+	<div>504     网关,响应,超时。比如请求时长超出了服务器的响应时间限制。</div>
+	<div><br/></div>
+	<div><strong>HTTP REQUEST</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>Address               122.224.70.220:80</div>
+	<div>URL                     http://www.baidu.com</div>
+	<div>Method                get / post / put / delete</div>
+	<div>Status Code          200/301/404/500</div>
+	<div><br/></div>
+	<div>Host                    www.baidu.com</div>
+	<div>Cookie</div>
+	<div>Referer</div>
+	<div>User-Agent</div>
+	<div><br/></div>
+	<div>Accept                         text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</div>
+	<div>Accept-Encoding           gzip,deflate,sdch</div>
+	<div>Accept-Language           zh-CN,zh;q=0.8,zh-TW;q=0.6,en;q=0.4,ja;q=0.2,de;q=0.2</div>
+	<div>Cache-Control               no-cache</div>
+	<div>Accept-Encoding            gzip, defalse, sdch</div>
+	<div>Connection                    keep-alive</div>
+	<div><br/></div>
+	<div><strong>HTTP RESPONE</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>Content-Type            image/png, text/plian, text/html, text/css, application/javascript, text/javascript ; charset=UTF-8</div>
+	<div>Content-Length          5785</div>
+	<div>Content-Encoding       gzip</div>
+	<div><br/></div>
+	<div>Date</div>
+	<div>Server                        nginx/1.4.2</div>
+	<div><br/></div>
+	<div>Connection                keep-alive</div>
+	<div>ETag</div>
+	<div>Expires</div>
+	<div>Last-Modified</div>
+	<div><br/></div>
+	<div>Transfer-Encoding     chunked</div>
+	<div><br/></div>
+	<div><strong>Cache</strong></div>
+	<div>
+		<hr/>
+	</div>
+	<div>
+		<div><b>Cache-Control:  </b>用于控制HTTP缓存</div>
+		<div><br/></div>
+		<div><b>Expires</b>:  指定客户端（如果不强制刷新的话）在多长时间里可以不向服务器发请求，直接读本地缓存。</div>
+		<div><span style="font-size: 14px; line-height: 21px; text-align: left;">需和Last-Modified结合使用。用于控制请求文件的有效时间，当请求数据在有效期内时客 户端浏览器从缓存请求数据而不是服务器端. 当缓存中数据失效或过期，才决定从服务器更新数据</span></div>
+		<div><span style="color: rgb(69, 69, 69); font-family: tahoma, helvetica, arial; font-size: 14px; line-height: 21px; background-color: rgb(255, 255, 255);">Expires有缺点，比如说，服务端和客户端的时间设置可能不同，这就会使缓存的失效可能并不能精确的按服务器的预期进行。</span></div>
+		<div><span style="color: rgb(69, 69, 69); font-family: tahoma, helvetica, arial; font-size: 14px; line-height: 21px; background-color: rgb(255, 255, 255);"><br/></span></div>
+		<div><b style="font-size: 14px; line-height: 21px; text-align: left;">Etag:  </b><span style="font-size: 14px; line-height: 21px; text-align: left;">被请求变量的实体标记,</span><span style="font-size: 14px; line-height: 21px; text-align: left;">简单点即服务器响应时给请求URL标记，并在HTTP响应头中将其传送到客户端.</span></div>
+		<div><span style="font-size: 14px; line-height: 21px; text-align: left;"><br/></span></div>
+		<div><strong>Last-Modified:  </strong>此文件在服务期端最后被修改的时间</div>
+		<div><b>If-Modified-Since</b>:  <span style="font-size: 14px; line-height: 21px; text-align: left;">浏览器会向服务器传送 If-Modified-Since 报头(Http Request Header)，询问该时间之后文件是否有被修改过</span></div><br/>
+	</div>
+	<div><br/></div>
+	<div><br/></div><div>1.缓存控制在互联网站的应用中，缓存几乎无处不在，在基于http的服务中，我们也可以对一些不常改变的内容在客户端进行缓存，这样在多次访问中可以复用缓存内容，加快访问速度，提升用户体验。http的协议里规定了一些用于缓存控制的http消息头：<br/><br/></div>
+	<div>Cache-Control(HTTP/1.1)/Pragma(HTTP/1.0)：指示客户端是否进行缓存以及缓存的时间是多长。默认值是private，也就是把内容缓存在用户私有空间。比如：Cache-Control:max-age=86400,must-revalidate，这是告诉客户端所请求的资源缓存一天（max-age单位是秒，相对时间），过期之后必须进行重新检验。<br/><br/></div>
+	<div>Expires：指定客户端（如果不强制刷新的话）在多长时间里可以不向服务器发请求，直接读本地缓存。<br/><br/>
+  1. 优先级：Cache-Control &gt; Expires；<br/>
+  2. 详细参数说明：http://condor.depaul.edu/dmumaugh/readings/handouts/SE435/HTTP/node24.html<br/>
+  3. 不同浏览器的不同行为（刷新，后退，地址栏回车等）在实现上可能有差异；<br/><br/><br/>
+Last-Modified/If-Modified-Since：Last-Modified是服务器端返回给客户端的资源最后修改时间戳，这样，客户端在下次请求时（比如强制刷新）会带上If-Modified-Since参数来校验资源是否有更新，没有更新的话服务器就返回304状态码，客户端直接取本地缓存的资源。这个时候只有请求开销，没有网络传输开销。注意：时间戳必须是格林威治(GMT)时间，比如：Last-Modified:Sat, 19 Oct 2013 09:20:15 GMT</div>
+	<div><br/></div>
+	<div>ETag/If-None-Match：ETag是根据文件属性通过一定算法生成的资源标识，也是用来确定客户端请求的资源是否有更新。如果服务器返回了一个ETag值给客户端，那么下次客户端请求时会带上If-None-Match参数来校验资源是否更新，没有更新的就返回304状态码。（效果基本等同于Last-Modified）<br/><br/>
+  1. ETag需要计算，对于计算资源紧张的服务器来说是一种消耗，所以有些网站直接不使用ETag；<br/>
+  2. 如果服务器在负载均衡后面，同一个资源的请求可能分发到不同的后端机器上，由于ETag的计算依赖于文件属性，不同机器上内容相同的文件可能生成的ETag不同，这样就可能使本来内容没变的文件通过ETag校验失败。这里有两种解决方案：一是etag计算不依赖于本地机器，比如直接算文件内容的md5值；二是在负载均衡器上把相同的url请求分发到同一台后端机器。<br/><br/><br/>
+在我们的实际业务场景下，http的缓存具有非常大的用途，下面列举一些：<br/><br/>
+  1. 充分利用客户端的资源，比如一些客户端需要频繁访问的静态文件，像LOGO，广告图等，完全可以缓存在客户端本地。这样可以减少网络请求，加快客户端展示，还能减少服务器请求的压力。<br/>
+  2. 我们的一些静态内容，比如新闻，博客等，在被搜索引擎爬虫抓取的时候，通过控制缓存参数，就可以减少爬虫的抓取频率，减少不必要的资源浪费。<br/>
+  3. 如果我们的静态资源使用了CDN，那么设置了http缓存就可以在CDN节点上保存一份文件，减少CDN的回源次数，减少网络延时和源站服务器压力。<br/><br/><br/>
+2.断点请求Accept-Ranges：服务端支持断点下载时会返回这个响应头给客户端，当客户端知道这个以后就可以发送断点请求了。</div>
+	<div><br/>
+Content-Length：响应信息的长度，告诉客户端当前请求返回了多少数据。这里要注意一下，用head方法提交请求时不会返回具体数据，但是这个Content-Length会返回完整数据的大小。<br/>
+Range/Content-Range：客户端请求时提交名为Range的header，告诉服务器自己要请求哪部分的数据。比如：Range: bytes=0-1023表示请求第0到1023个字节.然后服务器返回这1024个字节的内容给客户端，响应头中会带上Content-Range。即：Content-Range: bytes 0-1023/4096，这个4096就是文件总大小。客户端下次请求可以从第1024个字节处开始，Range: bytes=1024-xxxx<br/>
+Accept-Encoding/Content-Encoding：前者是客户端支持接收的消息编码类型。默认是identity，可选值有gzip,compress等。后者是服务器端响应信息的内容编码类型，常用的就是压缩。压缩的好处显而易见，可以大大减少网络传输的开销，相对于服务器端压缩产生的cpu消耗，网络传输的减少显然更实在。常见形式：Content-Encoding: gzip,deflate,compress.通常我们对html,js,css,xml,json之类的响应结果可以进行压缩传输。<br/>
+Transfer-Encoding：response header.响应消息的传输编码类型，规定了网络传输的形式。一般都是下面这种形式：Transfer-Encoding: chunked。当服务器产生动态内容，不知道响应信息的具体长度时，可以通过这个指定分块进行传输，处理多少数据就返回多少数据，这样不用等到数据都准备好了一次性返回。结合上面的内容编码，比如gzip，可以分块压缩并进行传输。另外，请注意，在使用这种编码传输时，我们是看不到Content-Length的，因为内容还没有完全生成。<br/>
+X-Forward-For：request header. 用来标识用户的真实ip，特别是通过代理(正向或反向)访问服务器或是服务器在负载均衡设备后面的情况。格式：X-forward-For: client,proxy1,proxy2,…最左边的是最接近客户端的ip。<br/>
+User-Agent：request header.服务器用来识别客户端基本信息的请求头。一般这个在识别搜索爬虫的时候有用，某些场景下也可以用这个来做一些客户端的统计。<br/>
+Referer：request header.客户端访问服务器时，这个Referer来指定请求来源，比如是从哪个网站链接过来的，我们在一些统计中会经常用到这个。另外，还有一个重要的用途就是在需要资源防盗链的场景中来过滤非法的请求来源（但是，这个referer是客户端可以伪造的）。<br/>
+Location：response header.在301/302状态码的响应头中，都会带上这个Location头，来指示客户端用新的地址去访问需要的资源。<br/>
+Connection：request/response header.在http/1.1中，客户端和服务端默认都是保持连接的，也就是Connection: keep-alive.如果任何一方不想保持连接，都可以把这个值设置为close.默认情况下，客户端和服务端会保持一个长连接，这样客户端就可以用这个连接发送多次http请求，减少频繁创建连接带来的消耗。对于这个参数，在服务端可能要做更多的设置，比如连接keep-alive的时间，服务器内核的一些网络参数设置(针对tcp)。<br/>
+Session和Cookiehttp请求是无状态的请求，但是在我们的互联网应用中，经常需要标识用户状态信息来完成一些交互性的操作，比如用户认证要记录用户登录状态，购物车应用要记住用户选择的商品，广告投放应用要记录用户的历史浏览行为等等。这里就会用到session和cookie了。</div>
+	<div><br/></div>
+	<div><br/>
+session:是指http请求-响应的过程中客户端与服务器端的交互状态，这些信息被保存在服务器端，比如内存，数据库等。每个session都有一个唯一标识，由服务器生成，这个标识也要在客户端进行保存，这样客户端在下次请求时可以带上这个标识，方便服务器判断客户端的状态。</div>
+	<div><br/>
+客户端对session的支持：<br/><br/>
+  1. 通过cookie保存session id，在请求时发送给服务器。<br/>
+  2. 通过url的参数携带session id与服务器通信。<br/>
+  3. 通过表单的隐藏字段携带session id与服务器通信。<br/><br/>
+session共享的问题：<br/>
+在分布式应用中，我们的http server一般都架在反向代理或是负载均衡设备后面，这就会面临一个session共享的问题。也就是同一个用户的多个请求可能被分发到多个不同的机器，如果我们把session保存在机器本地内存中的话，就无法在多个机器间共享用户的session。这个问题，一般来说，我们可以有两种方式来解决：<br/><br/>
+  1. 把session存放到分布式的内存(eg:memcached)或是集中式存储中(eg:database)。<br/>
+  2. 在反向代理或负载均衡设备上把相同用户的请求分发到同一台机器（这里要处理好机器宕机后请求重新分配的问题）。<br/><br/>
+cookie:在客户端保持状态化信息，每个cookie内容都属于特定的域(domain)和路径(path)，出于安全考虑，不同域或路径下的cookie不能共享。<br/>
+会话cookie：没有指定过期时间，保存在内存，浏览器关闭后就失效。<br/>
+持久cookie：指定了过期时间，保存在浏览器本地。<br/>
+详细内容可以参考：http://en.wikipedia.org/wiki/HTTP_cookie<br/>
+需要注意的是cookie会存在一些安全方面的问题。<br/><br/><br/><br/></div>
+
+
+</span>
+</div></body></html> 
